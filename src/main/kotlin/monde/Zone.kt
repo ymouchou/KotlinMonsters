@@ -1,0 +1,4 @@
+package monde
+
+class Zone {
+}
