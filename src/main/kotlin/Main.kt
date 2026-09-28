@@ -1,4 +1,5 @@
 import dresseur.Entraineur
+import monde.Zone
 import monstre.EspeceMonstre
 
 var joueur = Entraineur(1,"Sacha",100)
@@ -67,8 +68,28 @@ var especeAquamy = EspeceMonstre(
     caractères = "Calme, rêveur, mystérieux",
 )
 
+var route1 = Zone(
+    id = 1,
+    nom = "Route 1",
+    expZone = 100,
+    especesMonstres = mutableListOf(especeAquamy, especeFlamkip),
+    zoneSuivante = TODO(),
+    zonePrecedente = TODO()
+)
+
+var route2 = Zone(
+    id = 2,
+    nom = "Route 2",
+    expZone = 100,
+    especesMonstres = mutableListOf(especeFlamkip, especeSpringleaf),
+    zoneSuivante = TODO(),
+    zonePrecedente = TODO()
+)
+
 
 fun main() {
+    route1.zoneSuivante = route2
+    route2.zonePrecedente = route1
     println(especeFlamkip.afficheArt(true))
 }
 
