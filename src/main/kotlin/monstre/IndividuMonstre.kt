@@ -24,6 +24,19 @@ class IndividuMonstre(
     var potentiel: Double = (5..20).random() / 10.0
 
     var exp: Double = 0.0
+        set(value) {
+            field = value
+
+            val estNiveau1 = niveau == 1
+
+            while (field >= palierExp(niveau)) {
+                levelUp()
+
+                if (!estNiveau1) {
+                    println("Le monstre $nom est maintenant niveau $niveau !")
+                }
+            }
+        }
 
     /**
      *  @property pv  Points de vie actuels.
@@ -35,6 +48,9 @@ class IndividuMonstre(
             field = nouveauPv.coerceIn(0, pvMax)
         }
 
+    init {
+        this.exp = expInit // applique le setter et déclenche un éventuel level-up
+    }
 
     /**
      * Calcule l'expérience totale nécessaire pour atteindre un niveau donné.
@@ -58,8 +74,10 @@ class IndividuMonstre(
 
         val ancienPvMax = pvMax
 
-        pvMax += (espece.basePv * potentiel).roundToInt() + (-5..5).random()
+        pvMax += (espece.modPv * potentiel).roundToInt() + (-5..5).random()
 
         pv += pvMax - ancienPvMax
     }
+
+
 }

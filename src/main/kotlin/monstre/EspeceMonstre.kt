@@ -26,7 +26,7 @@ import java.io.File
  * @property modPv Le mode des pv
  * @property description La description de l'espèce
  * @property particularites Les particularités de l'espèce
- * @property caractères Les caractères de l'espèce
+ * @property caracteres Les caractères de l'espèce
 
  */
 
@@ -48,7 +48,7 @@ class EspeceMonstre(
     val modPv: Double,
     val description: String = "",
     val particularites: String = "",
-    val caractères: String = "",
+    val caracteres: String = "",
 ){
     /**
      * Affiche la représentation artistique ASCII du monstre.

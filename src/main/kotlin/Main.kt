@@ -1,6 +1,7 @@
 import dresseur.Entraineur
 import monde.Zone
 import monstre.EspeceMonstre
+import monstre.IndividuMonstre
 
 var joueur = Entraineur(1,"Sacha",100)
 var rival = Entraineur(2,"Regis",200)
@@ -23,7 +24,7 @@ var especeSpringleaf = EspeceMonstre(
     modPv = 34.0,
     description = "Petit monstre espiègle rond comme une graine, adore le soleil.",
     particularites = "Sa feuille sur la tête indique son humeur.",
-    caractères = "Curieux, amical, timide",
+    caracteres = "Curieux, amical, timide",
 )
 
 var especeFlamkip = EspeceMonstre(
@@ -44,7 +45,7 @@ var especeFlamkip = EspeceMonstre(
     modPv = 22.0,
     description = "Petit animal entouré de flammes, déteste le froid.",
     particularites = "Sa flamme change d’intensité selon son énergie.",
-    caractères = "Impulsif, joueur, loyal",
+    caracteres = "Impulsif, joueur, loyal",
 )
 
 var especeAquamy = EspeceMonstre(
@@ -65,7 +66,7 @@ var especeAquamy = EspeceMonstre(
     modPv = 27.0,
     description = "Créature vaporeuse semblable à un nuage, produit des gouttes pures.",
     particularites = "Fait baisser la température en s’endormant.",
-    caractères = "Calme, rêveur, mystérieux",
+    caracteres = "Calme, rêveur, mystérieux",
 )
 
 var route1 = Zone(
@@ -88,9 +89,10 @@ var route2 = Zone(
 
 
 fun main() {
-    route1.zoneSuivante = route2
-    route2.zonePrecedente = route1
-    println(especeFlamkip.afficheArt(true))
+    val monstre1 = IndividuMonstre(id = 1, nom = "springleaf", expInit = 1500.0, espece = especeSpringleaf)
+    val monstre2 = IndividuMonstre(id = 2, nom = "flamkip", expInit = 1500.0, espece = especeFlamkip)
+    val monstre3 = IndividuMonstre(3, "aquamy", 1500.0, especeAquamy)
+
 }
 
 
