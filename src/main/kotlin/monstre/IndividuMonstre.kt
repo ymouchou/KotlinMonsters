@@ -1,6 +1,7 @@
 package monstre
 
 import kotlin.math.roundToInt
+import kotlin.random.Random
 
 import dresseur.Entraineur
 
@@ -8,7 +9,7 @@ class IndividuMonstre(
     var id: Int,
     var nom: String,
     var espece: EspeceMonstre,
-    var entraineur: Entraineur?,
+    var entraineur: Entraineur?=null,
     var expInit: Double
 ){
     var niveau: Int = 1
@@ -77,6 +78,76 @@ class IndividuMonstre(
         pvMax += (espece.modPv * potentiel).roundToInt() + (-5..5).random()
 
         pv += pvMax - ancienPvMax
+    }
+
+    /**
+     * Attaque un autre [IndividuMonstre] et inflige des dégâts.
+     *
+     * Les dégâts sont calculés de manière très simple pour le moment :
+     * `dégâts = attaque - (défense / 2)` (minimum 1 dégât).
+     *
+     * @param cible Monstre cible de l'attaque.
+     */
+
+    fun attaquer(cible: IndividuMonstre) {
+        val degatBrut = this.attaque
+        var degatTotal = degatBrut - (cible.defense / 2)
+
+        if (degatTotal < 1) {
+            degatTotal = 1
+        }
+
+        val pvAvant = cible.pv
+
+        cible.pv -= degatTotal
+
+        val pvApres = cible.pv
+
+        println("$nom inflige ${pvAvant - pvApres} dégâts à la cible ${cible.nom}")
+    }
+
+    /**
+     * Demande au joueur de renommer le monstre.
+     * Si l'utilisateur entre un texte vide, le nom n'est pas modifié.
+     */
+    fun renommer() {
+        println("Renommer $nom ?")
+        val nouveauNom = readln()
+
+        if (!nouveauNom.isNullOrEmpty()) {
+            nom = nouveauNom
+        }
+    }
+
+    /**
+     * Affiche l'art ASCII du monstre ainsi que ses caractéristiques.
+     */
+    fun afficheDetail() {
+        val art = espece.afficheArt()
+        val artLines = art.split("\n")
+
+        val details = listOf(
+            "Nom : $nom",
+            "Niveau : $niveau",
+            "PV : $pv / $pvMax",
+            "Attaque : $attaque",
+            "Défense : $defense",
+            "Vitesse : $vitesse",
+            "Attaque spéciale : $attaqueSpe",
+            "Défense spéciale : $defenseSpe"
+        )
+
+        println("=== $nom ===")
+
+        for (ligne in artLines) {
+            println(ligne)
+        }
+
+        println()
+
+        for (detail in details) {
+            println(detail)
+        }
     }
 
 

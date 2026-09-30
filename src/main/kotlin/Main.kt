@@ -74,8 +74,8 @@ var route1 = Zone(
     nom = "Route 1",
     expZone = 100,
     especesMonstres = mutableListOf(especeAquamy, especeFlamkip),
-    zoneSuivante = TODO(),
-    zonePrecedente = TODO()
+    zoneSuivante = null,
+    zonePrecedente = null
 )
 
 var route2 = Zone(
@@ -83,15 +83,21 @@ var route2 = Zone(
     nom = "Route 2",
     expZone = 100,
     especesMonstres = mutableListOf(especeFlamkip, especeSpringleaf),
-    zoneSuivante = TODO(),
-    zonePrecedente = TODO()
+    zoneSuivante = null,
+    zonePrecedente = null
 )
 
 
 fun main() {
     val monstre1 = IndividuMonstre(id = 1, nom = "springleaf", expInit = 1500.0, espece = especeSpringleaf)
     val monstre2 = IndividuMonstre(id = 2, nom = "flamkip", expInit = 1500.0, espece = especeFlamkip)
-    val monstre3 = IndividuMonstre(3, "aquamy", 1500.0, especeAquamy)
+    val monstre3 = IndividuMonstre(id = 3, nom = "aquamy", expInit = 1500.0, espece = especeAquamy)
+
+    monstre1.renommer()
+
+    println("Nouveau nom du monstre : ${monstre1.nom}")
+
+    monstre1.afficheDetail()
 
 }
 
