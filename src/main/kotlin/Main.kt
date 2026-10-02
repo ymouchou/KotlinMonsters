@@ -1,5 +1,6 @@
 import dresseur.Entraineur
 import item.Badge
+import item.MonsterKube
 import monde.Zone
 import monstre.EspeceMonstre
 import monstre.IndividuMonstre
@@ -94,11 +95,11 @@ fun main() {
     val monstre2 = IndividuMonstre(id = 2, nom = "flamkip", expInit = 1500.0, espece = especeFlamkip)
     val monstre3 = IndividuMonstre(id = 3, nom = "aquamy", expInit = 1500.0, espece = especeAquamy)
 
-    monstre1.renommer()
+    //monstre1.renommer()
 
-    println("Nouveau nom du monstre : ${monstre1.nom}")
+    //println("Nouveau nom du monstre : ${monstre1.nom}")
 
-    monstre1.afficheDetail()
+    //monstre1.afficheDetail()
 
     val champion = Entraineur(
         id = 1,
@@ -112,6 +113,16 @@ fun main() {
         description = "Un badge obtenu après avoir battu Pierre.",
         champion = champion
     )
+
+    val monsterKube = MonsterKube(
+        id = 1,
+        nom = "Monster Kube",
+        description = "Permet de capturer un monstre.",
+        chanceCapture = 50.0,
+        joueur = joueur
+    )
+
+    monsterKube.utiliser(monstre1)
 
 }
 
