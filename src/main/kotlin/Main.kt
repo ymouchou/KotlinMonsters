@@ -1,4 +1,5 @@
 import dresseur.Entraineur
+import item.Badge
 import monde.Zone
 import monstre.EspeceMonstre
 import monstre.IndividuMonstre
@@ -98,6 +99,19 @@ fun main() {
     println("Nouveau nom du monstre : ${monstre1.nom}")
 
     monstre1.afficheDetail()
+
+    val champion = Entraineur(
+        id = 1,
+        nom = "Pierre",
+        argents = 1000
+    )
+
+    val badge = Badge(
+        id = 1,
+        nom = "Badge Roche",
+        description = "Un badge obtenu après avoir battu Pierre.",
+        champion = champion
+    )
 
 }
 
