@@ -1,6 +1,7 @@
 import dresseur.Entraineur
 import item.Badge
 import item.MonsterKube
+import jeu.CombatMonstre
 import monde.Zone
 import monstre.EspeceMonstre
 import monstre.IndividuMonstre
@@ -122,7 +123,14 @@ fun main() {
         joueur = joueur
     )
 
-    monsterKube.utiliser(monstre1)
+    //monsterKube.utiliser(monstre1)
+
+    val combat = CombatMonstre(
+        monstreJoueur = monstre1,
+        monstreSauvage = monstre2
+    )
+
+    println(combat.gameOver())
 
 }
 
