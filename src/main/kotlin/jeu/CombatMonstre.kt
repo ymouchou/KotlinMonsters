@@ -15,7 +15,14 @@ class CombatMonstre(
      * @return true si le joueur a perdu, sinon false.
      */
     fun gameOver(): Boolean {
-        return monstreJoueur.entraineur?.equipeMonstre?.none { it.pv > 0 } ?: false
+        val equipe = monstreJoueur.entraineur?.equipeMonstre ?: return false
+
+        for (monstre in equipe) {
+            if (monstre.pv > 0) {
+                return false
+            }
+        }
+        return true
     }
 
     /**
