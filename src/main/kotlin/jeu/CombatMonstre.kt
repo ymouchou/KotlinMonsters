@@ -166,4 +166,70 @@ class CombatMonstre(
         // Par défaut, le combat continue
         return true
     }
+
+    /**
+     * Affiche les informations des monstres (niveau, PV) ainsi que leur art ASCII
+     * pour le round en cours.
+     */
+    fun afficheCombat() {
+        println("======== Début Round : $round ========")
+        println("Niveau : ${monstreSauvage.niveau}")
+        println("PV : ${monstreSauvage.pv} / ${monstreSauvage.pvMax}")
+
+        println(monstreSauvage.espece.afficheArt(true))
+
+        println(monstreJoueur.espece.afficheArt(false))
+
+        println("Niveau : ${monstreJoueur.niveau}")
+        println("PV : ${monstreJoueur.pv} / ${monstreJoueur.pvMax}")
+    }
+
+    /**
+     * Fait jouer les deux monstres pour le tour en cours (le plus rapide commence).
+     * Si le joueur décide de fuir, de capturer ou si le combat s'arrête, l'exécution s'interrompt.
+     */
+    fun jouer() {
+        val joueurPlusRapide = monstreJoueur.vitesse >= monstreSauvage.vitesse
+
+        afficheCombat()
+
+        if (joueurPlusRapide) {
+            val continuer = actionJoueur()
+            if (!continuer) {
+                return
+            }
+            actionAdversaire()
+        } else {
+            actionAdversaire()
+
+            if (!gameOver()) {
+                val continuer = actionJoueur()
+                if (!continuer) {
+                    return
+                }
+            }
+        }
+    }
+
+    /**
+     * Lance le combat et gère les rounds jusqu'à la victoire ou la défaite.
+     *
+     * Affiche un message de fin si le joueur perd et restaure les PV
+     * de tous ses monstres.
+     */
+    fun lanceCombat() {
+        val joueur = monstreJoueur.entraineur
+
+        while (!gameOver() && !joueurGagne()) {
+            this.jouer()
+            println("======== Fin du Round : $round ========")
+            round++
+        }
+
+        if (gameOver()) {
+            joueur?.equipeMonstre?.forEach { monstre -> monstre.pv = monstre.pvMax }
+            println("Game Over !")
+        }
+    }
+
 }
