@@ -5,9 +5,37 @@ import jeu.CombatMonstre
 import monde.Zone
 import monstre.EspeceMonstre
 import monstre.IndividuMonstre
+import jeu.Partie
+
+/**
+ * Affiche l'introduction du jeu, demande le nom du joueur,
+ * puis initialise et retourne un nouvel objet Partie.
+ *
+ * @return La nouvelle Partie créée.
+ */
+fun nouvellePartie(): Partie {
+    println("=============================================")
+    println("      BIENVENUE DANS KOTLIN MONSTERS !      ")
+    println("=============================================")
+    println("Un monde rempli de créatures fantastiques vous attend.")
+
+    print("\nEntrez votre nom de dresseur : ")
+    val nomSaisi = readln().trim()
+    val nomJoueur = if (nomSaisi.isNotEmpty()) nomSaisi else "Sacha"
+
+    // Mise à jour du dresseur
+    joueur.nom = nomJoueur
+
+    // Création et retour de l'instance Partie
+    return Partie(
+        id = 1,
+        joueur = joueur,
+        zone = route1
+    )
+}
 
 var joueur = Entraineur(1,"Sacha",100)
-var rival = Entraineur(2,"Regis",200)
+var rival = Entraineur(2,"Rival",500)
 
 var especeSpringleaf = EspeceMonstre(
     id = 1,
@@ -72,66 +100,53 @@ var especeAquamy = EspeceMonstre(
     caracteres = "Calme, rêveur, mystérieux",
 )
 
-var route1 = Zone(
+val route1 = Zone(
     id = 1,
     nom = "Route 1",
-    expZone = 100,
+    expZone = 600,
     especesMonstres = mutableListOf(especeAquamy, especeFlamkip),
     zoneSuivante = null,
     zonePrecedente = null
 )
 
-var route2 = Zone(
+val route2 = Zone(
     id = 2,
     nom = "Route 2",
-    expZone = 100,
+    expZone = 800,
     especesMonstres = mutableListOf(especeFlamkip, especeSpringleaf),
     zoneSuivante = null,
     zonePrecedente = null
 )
 
+val kube1 = MonsterKube(
+    id = 1,
+    nom = "Monster Kube",
+    description = "Permet de capturer un monstre.",
+    chanceCapture = 50.0,
+    joueur = joueur
+)
+
 
 fun main() {
-    val monstre1 = IndividuMonstre(id = 1, nom = "springleaf", expInit = 1500.0, espece = especeSpringleaf)
-    val monstre2 = IndividuMonstre(id = 2, nom = "flamkip", expInit = 1500.0, espece = especeFlamkip)
-    val monstre3 = IndividuMonstre(id = 3, nom = "aquamy", expInit = 1500.0, espece = especeAquamy)
+    // 1. Chaînage des zones
+    route1.zoneSuivante = route2
+    route2.zonePrecedente = route1
 
-    //monstre1.renommer()
+    // 2. Ajout du Kube dans le sac du joueur
+    joueur.sacAItems.add(kube1)
 
-    //println("Nouveau nom du monstre : ${monstre1.nom}")
+    // 3. Création de la partie
+    val partie = nouvellePartie()
 
-    //monstre1.afficheDetail()
-
-    val champion = Entraineur(
-        id = 1,
-        nom = "Pierre",
-        argents = 1000
+    // 4. Choix du starter par le joueur
+    partie.choixStarter(
+        especeSpringleaf = especeSpringleaf,
+        especeFlamkip = especeFlamkip,
+        especeAquamy = especeAquamy
     )
 
-    val badge = Badge(
-        id = 1,
-        nom = "Badge Roche",
-        description = "Un badge obtenu après avoir battu Pierre.",
-        champion = champion
-    )
-
-    val monsterKube = MonsterKube(
-        id = 1,
-        nom = "Monster Kube",
-        description = "Permet de capturer un monstre.",
-        chanceCapture = 50.0,
-        joueur = joueur
-    )
-
-    //monsterKube.utiliser(monstre1)
-
-    val combat = CombatMonstre(
-        monstreJoueur = monstre1,
-        monstreSauvage = monstre2
-    )
-
-    println(combat.gameOver())
-
+    // 5. Lancement de la boucle de jeu principale
+    partie.jouer()
 }
 
 
