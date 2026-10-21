@@ -65,56 +65,50 @@ class CombatMonstre(
 
 
     /**
-     * Permet au joueur d'effectuer une action pendant son tour.
+     * Permet au joueur d'effectuer une action pendant son tour (Attaquer, Objet, Changer de monstre).
      * @return true si le combat doit continuer, false sinon.
      */
     fun actionJoueur(): Boolean {
-        // 1. Vérifier si gameOver() est vrai
         if (gameOver()) {
             return false
         }
 
-        val joueur = monstreJoueur.entraineur
+        val dresseur = monstreJoueur.entraineur
 
-        // 2. Afficher le menu d'actions (1, 2, 3, et ajout de 4, 5)
-        println("\n=== Tour de ${joueur?.nom ?: "Joueur"} ===")
+        println("\n=== Tour de ${dresseur?.nom ?: "Joueur"} ===")
         println("1. Attaquer")
         println("2. Utiliser un objet")
         println("3. Changer de monstre")
-        println("4. Fuir")
-        println("5. Attendre")
         print("Votre choix : ")
 
-        val choixAction = readln().toIntOrNull() ?: 5
+        val choixMenu = readln().toIntOrNull() ?: 3
 
-        when (choixAction) {
+        when (choixMenu) {
             1 -> {
                 // Choix 1 : Attaquer
                 monstreJoueur.attaquer(monstreSauvage)
             }
             2 -> {
                 // Choix 2 : Utiliser un objet
-                if (joueur == null || joueur.sacAItems.isEmpty()) {
+                if (dresseur == null || dresseur.sacAItems.isEmpty()) {
                     println("Votre sac est vide !")
                 } else {
                     println("=== Sac à items ===")
-                    for ((index, item) in joueur.sacAItems.withIndex()) {
-                        println("$index : ${item.nom} - ${item.description}")
+                    for ((idx, monItem) in dresseur.sacAItems.withIndex()) {
+                        println("$idx : ${monItem.nom} - ${monItem.description}")
                     }
                     print("Choisissez l'index de l'objet : ")
-                    val indexChoix = readln().toIntOrNull()
+                    val indexObjet = readln().toIntOrNull()
 
-                    if (indexChoix != null && indexChoix in joueur.sacAItems.indices) {
-                        val objetChoisi = joueur.sacAItems[indexChoix]
+                    if (indexObjet != null && indexObjet in dresseur.sacAItems.indices) {
+                        val objetSelectionne = dresseur.sacAItems[indexObjet]
 
-                        // Vérifier si l'objet implémente l'interface Utilisable
-                        if (objetChoisi is item.Utilisable) {
-                            val captureRéussie = objetChoisi.utiliser(monstreSauvage)
-                            if (captureRéussie) {
-                                // Si le monstre est capturé, le combat s'arrête (renvoie false)
+                        if (objetSelectionne is item.Utilisable) {
+                            val captureEffectuee = objetSelectionne.utiliser(monstreSauvage)
+                            if (captureEffectuee) {
+                                // Si le monstre est capturé, le combat s'arrête
                                 return false
                             }
-                            // Sinon, continuer le combat
                         } else {
                             println("Objet non utilisable")
                         }
@@ -125,38 +119,29 @@ class CombatMonstre(
             }
             3 -> {
                 // Choix 3 : Changer de monstre
-                if (joueur == null || joueur.equipeMonstre.isEmpty()) {
+                if (dresseur == null || dresseur.equipeMonstre.isEmpty()) {
                     println("Aucun monstre disponible dans l'équipe.")
                 } else {
                     println("=== Équipe de monstres (PV > 0) ===")
-                    for ((index, m) in joueur.equipeMonstre.withIndex()) {
-                        println("$index : ${m.nom} (PV: ${m.pv}/${m.pvMax})")
+                    for ((idx, m) in dresseur.equipeMonstre.withIndex()) {
+                        println("$idx : ${m.nom} (PV: ${m.pv}/${m.pvMax})")
                     }
                     print("Choisissez l'index du monstre : ")
-                    val indexChoix = readln().toIntOrNull()
+                    val indexMonstre = readln().toIntOrNull()
 
-                    if (indexChoix != null && indexChoix in joueur.equipeMonstre.indices) {
-                        val choixMonstre = joueur.equipeMonstre[indexChoix]
+                    if (indexMonstre != null && indexMonstre in dresseur.equipeMonstre.indices) {
+                        val monstreRemplacant = dresseur.equipeMonstre[indexMonstre]
 
-                        if (choixMonstre.pv <= 0) {
+                        if (monstreRemplacant.pv <= 0) {
                             println("Impossible ! Ce monstre est KO")
                         } else {
-                            println("${choixMonstre.nom} remplace ${monstreJoueur.nom}")
-                            monstreJoueur = choixMonstre
+                            println("${monstreRemplacant.nom} remplace ${monstreJoueur.nom}")
+                            monstreJoueur = monstreRemplacant
                         }
                     } else {
                         println("Index invalide.")
                     }
                 }
-            }
-            4 -> {
-                // Choix 4 : Fuir
-                println("${joueur?.nom ?: "Le joueur"} prend la fuite ! Fin du combat.")
-                return false
-            }
-            5 -> {
-                // Choix 5 : Attendre
-                println("${monstreJoueur.nom} passe son tour et attend...")
             }
             else -> {
                 println("Choix invalide, tour passé.")
